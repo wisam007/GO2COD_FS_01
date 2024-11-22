@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
-const Blog = require("../model/blogModel");
 
+const Blog = require("../model/blogModel");
+const User = require("../model/userModel");
 // Get all blogs
 
 const getBlogs = asyncHandler(async (req, res) => {
@@ -16,6 +17,7 @@ const addBlog = asyncHandler(async (req, res) => {
   const blog = await Blog.create({
     title: req.body.title,
     body: req.body.body,
+    user: { id: req.user.id, name: req.user.name },
   });
   res.status(200).json(blog);
 });
