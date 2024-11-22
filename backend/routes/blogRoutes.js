@@ -13,7 +13,7 @@ const {
 router.get("/", getBlogs);
 router.post("/", protect, addBlog);
 
-router.put("/:id", editBlog);
-router.delete("/:id", deleteBlog);
+router.put("/:id", protect, editBlog);
+router.delete("/:id", protect, deleteBlog);
 
 module.exports = router;

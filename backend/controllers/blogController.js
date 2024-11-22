@@ -17,7 +17,7 @@ const addBlog = asyncHandler(async (req, res) => {
   const blog = await Blog.create({
     title: req.body.title,
     body: req.body.body,
-    user: { id: req.user.id, name: req.user.name },
+    user: { userId: req.user.id, userName: req.user.name },
   });
   res.status(200).json(blog);
 });
@@ -30,6 +30,21 @@ const editBlog = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Blog not found");
   }
+
+  // check for user
+  const user = await User.findById(req.user.id);
+
+  if (!user) {
+    res.status(401);
+    throw new Error("User does not exist");
+  }
+
+  if (blog.user.userId.toString() !== user.id) {
+    res.status(401);
+    throw new Error("User not authorized ");
+  }
+
+  //update blog
   const updatedBlog = await Blog.findByIdAndUpdate(id, req.body, { new: true });
 
   res.status(200).json(updatedBlog);
@@ -41,6 +56,19 @@ const deleteBlog = asyncHandler(async (req, res) => {
   if (!blog) {
     res.status(400);
     throw new Error("Could not find blog to delete");
+  }
+
+  // check for user
+  const user = await User.findById(req.user.id);
+
+  if (!user) {
+    res.status(401);
+    throw new Error("User does not exist");
+  }
+
+  if (blog.user.userId.toString() !== user.id) {
+    res.status(401);
+    throw new Error("User not authorized ");
   }
   const deletedBlog = await Blog.findByIdAndDelete(id);
   res.status(200).json(deletedBlog);
