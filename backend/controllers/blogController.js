@@ -5,9 +5,18 @@ const User = require("../model/userModel");
 // Get all blogs
 
 const getBlogs = asyncHandler(async (req, res) => {
-  const blogs = await Blog.find();
+  const blogs = await Blog.find().sort({ createdAt: -1 });
   res.status(200).json(blogs);
 });
+
+//Get only user blogs
+const getMyBlogs = asyncHandler(async (req, res) => {
+  const myBlogs = await Blog.find({ "user.userId": req.user }).sort({
+    createdAt: -1,
+  });
+  res.status(200).json(myBlogs);
+});
+
 // add blog
 const addBlog = asyncHandler(async (req, res) => {
   if (!req.body.title || !req.body.body) {
@@ -74,4 +83,4 @@ const deleteBlog = asyncHandler(async (req, res) => {
   res.status(200).json(deletedBlog);
 });
 
-module.exports = { getBlogs, addBlog, editBlog, deleteBlog };
+module.exports = { getBlogs, getMyBlogs, addBlog, editBlog, deleteBlog };
