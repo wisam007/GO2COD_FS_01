@@ -9,6 +9,12 @@ const getBlogs = asyncHandler(async (req, res) => {
   res.status(200).json(blogs);
 });
 
+const openBlog = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const blog = await Blog.findOne({ _id: id });
+  res.status(200).json(blog);
+});
+
 //Get only user blogs
 const getMyBlogs = asyncHandler(async (req, res) => {
   const myBlogs = await Blog.find({ "user.userId": req.user }).sort({
@@ -83,4 +89,11 @@ const deleteBlog = asyncHandler(async (req, res) => {
   res.status(200).json(deletedBlog);
 });
 
-module.exports = { getBlogs, getMyBlogs, addBlog, editBlog, deleteBlog };
+module.exports = {
+  getBlogs,
+  openBlog,
+  getMyBlogs,
+  addBlog,
+  editBlog,
+  deleteBlog,
+};
