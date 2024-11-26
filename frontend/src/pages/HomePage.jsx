@@ -1,26 +1,37 @@
 import React from "react";
-
+import { BeatLoader } from "react-spinners";
+import { useEffect, useState } from "react";
+import BlogCard from "../components/BlogCard";
+import Heading from "../components/Heading";
+import axios from "axios";
 const HomePage = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [blogs, setBlogs] = useState([]);
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        setIsLoading(true);
+        const response = await axios.get("http://localhost:8000/api/blogs/");
+        setBlogs(response.data);
+        console.log(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchBlogs();
+  }, []);
   return (
-    <div className="p-3 flex-col space-y-2 items-center justify-center">
-      <div className="mockup-window bg-base-300 border flex">
-        <div>
-          {/* User info div */}
-          <div className="flex space-x-2 bg-white h-36 w-1/4">
-            <div className="avatar placeholder p-2 h-20">
-              <div className="bg-neutral text-neutral-content w-8 rounded-full">
-                <span className="text-xl">AB</span>
-              </div>
-            </div>
-          </div>
-
-          {/* blog Header and body div */}
-          <div></div>
+    <>
+      <Heading title="Recent Blogs" />
+      {isLoading && (
+        <div className="h-96 flex items-center justify-center">
+          <BeatLoader />
         </div>
-      </div>
-
-      <div className="mockup-window bg-base-300 border"></div>
-    </div>
+      )}
+      {!isLoading &&
+        blogs.map((blog, index) => <BlogCard key={index} blog={blog} />)}
+    </>
   );
 };
 
