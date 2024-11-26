@@ -8,10 +8,7 @@ const NavBar = () => {
   const handleLogout = async () => {
     console.log("logged out");
   };
-  const isAuthenticated = true;
-  const handleLogout = async () => {
-    console.log("logged out");
-  };
+
   return (
     <header className="bg-white shadow-lg  fixed left-0 top-0 w-svw">
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -117,7 +114,6 @@ const NavBar = () => {
           )}
         </div>
       </div>
-    </header>
     </header>
   );
 };
