@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Heading from "../components/Heading";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEdit, FaRecycle } from "react-icons/fa";
 import { MdDelete, MdEditSquare } from "react-icons/md";
+import { AuthContext } from "../context/AuthContext";
+import { BlogContext } from "../context/BlogContext";
 
 const MyBlogsPage = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated, currentUser } = useContext(AuthContext);
+  const { myBlogs, getMyBlogs } = useContext(BlogContext);
+
+  useEffect(() => {
+    if (!isAuthenticated || !currentUser) {
+      navigate("/login");
+    }
+  }, [currentUser]);
+
   return (
     <div>
       <Heading title={"Manage your blogs"} />

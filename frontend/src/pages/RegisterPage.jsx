@@ -1,11 +1,52 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 const RegisterPage = () => {
+  const { register, isLoading, isAuthenticated } = useContext(AuthContext);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    password2: "",
+  });
+
+  const navigate = useNavigate();
+  if (isAuthenticated) {
+    navigate("/");
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (formData.password !== formData.password2) {
+      toast.error("Password didn't match!!");
+      return;
+    }
+    try {
+      const { name, email, password } = formData;
+      const response = await register({ name, email, password });
+      if (response) {
+        toast.success("User registration successfull");
+        navigate("/");
+      }
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+      // const err = error.response.data.message;
+      // toast.error(err);
+    }
+  };
   return (
     <div className="flex items-center justify-around">
       <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-lg mt-20">
-        <form>
+        <form onSubmit={handleSubmit}>
           <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
             Register
           </h2>
@@ -21,6 +62,7 @@ const RegisterPage = () => {
               type="text"
               id="name"
               name="name"
+              onChange={handleChange}
               className="border rounded w-full py-2 px-3"
               required
             />
@@ -37,6 +79,7 @@ const RegisterPage = () => {
               type="email"
               id="email"
               name="email"
+              onChange={handleChange}
               className="border rounded w-full py-2 px-3"
               required
             />
@@ -53,6 +96,7 @@ const RegisterPage = () => {
               type="password"
               id="password"
               name="password"
+              onChange={handleChange}
               className="border rounded w-full py-2 px-3"
               required
             />
@@ -67,8 +111,9 @@ const RegisterPage = () => {
             </label>
             <input
               type="password"
-              id="confirm-password"
-              name="confirm-password"
+              id="password2"
+              name="password2"
+              onChange={handleChange}
               className="border rounded w-full py-2 px-3"
               required
             />

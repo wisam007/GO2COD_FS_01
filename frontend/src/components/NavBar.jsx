@@ -1,12 +1,18 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
 import { FaUser, FaSignInAlt, FaSignOutAlt, FaBlog } from "react-icons/fa";
 import logo from "/h-logo.png";
+import { toast } from "react-toastify";
 
 const NavBar = () => {
-  const isAuthenticated = true;
+  const { isAuthenticated, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const handleLogout = async () => {
-    console.log("logged out");
+    await logout();
+    toast.success("Logged Out Seccessfull!!");
+    navigate("/");
   };
 
   return (

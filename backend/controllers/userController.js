@@ -49,7 +49,8 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid user data");
   }
 });
-
+// _____________ LOGIN USER___________________
+// --------------------------------------------
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
