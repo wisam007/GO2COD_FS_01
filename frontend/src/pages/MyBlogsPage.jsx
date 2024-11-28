@@ -1,40 +1,79 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import Heading from "../components/Heading";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEdit, FaRecycle } from "react-icons/fa";
 import { MdDelete, MdEditSquare } from "react-icons/md";
 import { AuthContext } from "../context/AuthContext";
 import { BlogContext } from "../context/BlogContext";
+import { ClipLoader } from "react-spinners";
 
 const MyBlogsPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated, currentUser } = useContext(AuthContext);
-  const { myBlogs, getMyBlogs } = useContext(BlogContext);
+  const { blogs, isLoading, deleteBlog } = useContext(BlogContext);
 
-  useEffect(() => {
-    if (!isAuthenticated || !currentUser) {
-      navigate("/login");
-    }
-  }, [currentUser]);
+  // Redirect if the user is not logged in
+  if (!isAuthenticated || !currentUser) {
+    navigate("/login");
+    return null;
+  }
+
+  // Filter blogs created by the logged-in user
+  const myBlogs = blogs.filter((blog) => blog.user.userId === currentUser._id);
 
   return (
     <div>
-      <Heading title={"Manage your blogs"} />
-      <div className="bg-white shadow rounded-lg p-4 mt-4 flex-col  sm:flex-row  items-center justify-start sm:items-center">
-        <h4 className="text-2xl font-bold">Blog Post #3 : The chemical</h4>
-        <p className="pr-8 text-left font-light">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Error
-          dignissimos totam molestias vel maiores consequuntur, facere harum
-          adipisci asperiores? Libero.
-          <Link className="text-brand-500 font-semibold"> Read More</Link>
-        </p>
-        <div className="flex justify-end items-center space-x-4 text-2xl mx-7">
-          <MdEditSquare className="text-green-900" />
-          Edit
-          <MdDelete className="text-red-600" />
-          Delete
+      <Heading title="Manage Your Blogs" />
+      {isLoading ? (
+        <div className="h-svh flex items-center justify-center">
+          <ClipLoader />
         </div>
-      </div>
+      ) : (
+        <>
+          {myBlogs.length > 0 ? (
+            myBlogs.map((blog) => (
+              <div
+                key={blog.id}
+                className="bg-white shadow rounded-lg p-4 mt-4 flex-col sm:flex-row items-center justify-start sm:items-center"
+              >
+                <h4 className="text-2xl font-bold">{blog.title}</h4>
+                <p className="pr-8 text-left font-light">
+                  {/* Safely handle undefined or null content */}
+                  {blog.content
+                    ? `${blog.content.substring(0, 100)}...`
+                    : "No content available."}
+                  <Link
+                    to={`/blogs/${blog.id}`}
+                    className="text-brand-500 font-semibold"
+                  >
+                    Read More
+                  </Link>
+                </p>
+                <div className="flex justify-end items-center space-x-4 text-2xl mx-7">
+                  <button onClick={() => navigate(`/edit-blog/${blog.id}`)}>
+                    <MdEditSquare className="text-green-900 cursor-pointer" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      deleteBlog(blog._id, currentUser.token);
+                    }}
+                  >
+                    <MdDelete className="text-red-600 cursor-pointer" />
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="text-center">
+              <p className="text-gray-500">
+                You haven't created any blogs yet!
+              </p>
+              <Link to="/create-blog" className="text-brand-500 font-bold">
+                Create Blog
+              </Link>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };

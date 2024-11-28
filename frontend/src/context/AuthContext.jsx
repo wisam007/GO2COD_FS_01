@@ -13,8 +13,9 @@ export const AuthProvider = ({ children }) => {
     const userAlreadyLoggedIn = localStorage.getItem("user");
     if (userAlreadyLoggedIn) {
       setIsAuthenticated(true);
+      setCurrentUser(JSON.parse(userAlreadyLoggedIn));
     }
-  }, []);
+  }, [isAuthenticated]);
 
   // -----------------Login user--------------------
   //________________________________________________

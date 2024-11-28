@@ -6,7 +6,6 @@ export const BlogContext = createContext();
 export const BlogProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [blogs, setBlogs] = useState([]);
-  const [myBlogs, setMyBlogs] = useState([]);
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -22,30 +21,30 @@ export const BlogProvider = ({ children }) => {
     };
     fetchBlogs();
   }, []);
-  const getMyBlogs = async (token) => {
-    const config = {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    };
 
+  const deleteBlog = async (id, token) => {
     try {
       setIsLoading(true);
-      const response = await axios.get(
-        "http://localhost:8000/api/blogs/my",
-        config
+      const response = await axios.delete(
+        `http://localhost:8000/api/blogs/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      setMyBlogs(response.data);
+      setBlogs(blogs.filter((blog) => blog._id !== id));
       setIsLoading(false);
     } catch (error) {
       console.log(error);
-      setIsLoading(false); // Reset loading state on error
+      setIsLoading(false);
     }
   };
 
   const contextData = {
     blogs,
     isLoading,
+    deleteBlog,
   };
 
   return (
