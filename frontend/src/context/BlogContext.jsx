@@ -40,11 +40,31 @@ export const BlogProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
+  const addBlog = async (inputData, token) => {
+    try {
+      setIsLoading(true);
+      const response = await axios.post(
+        `http://localhost:8000/api/blogs`,
+        inputData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  };
 
   const contextData = {
     blogs,
     isLoading,
     deleteBlog,
+    addBlog,
   };
 
   return (
