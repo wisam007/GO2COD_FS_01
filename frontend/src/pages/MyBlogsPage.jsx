@@ -77,7 +77,7 @@ const MyBlogsPage = () => {
         to="/blogs/add"
         className="flex text-brand-500 text-lg  items-center justify-center mt-2 space-x-2 border-1 border-brand-500 p-2 "
       >
-        <h1 className=" text-brand-500 font-bold">Create Blog</h1>
+        <h1 className=" text-brand-500 font-bold">Add Blog</h1>
         <FaPlusCircle className="block" />
       </Link>
     </div>

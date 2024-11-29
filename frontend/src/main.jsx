@@ -12,7 +12,7 @@ createRoot(document.getElementById("root")).render(
     <AuthProvider>
       <BlogProvider>
         <App />
-        <ToastContainer />
+        <ToastContainer className={"mt-16"} />
       </BlogProvider>
     </AuthProvider>
   </StrictMode>
