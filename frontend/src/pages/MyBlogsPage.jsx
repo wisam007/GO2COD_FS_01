@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import Heading from "../components/Heading";
 import { Link, useNavigate } from "react-router-dom";
 import { MdDelete, MdEditSquare } from "react-icons/md";
+import { FaPlusCircle } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
 import { BlogContext } from "../context/BlogContext";
 import { BeatLoader } from "react-spinners";
@@ -67,13 +68,18 @@ const MyBlogsPage = () => {
               <p className="text-gray-500">
                 You haven't created any blogs yet!
               </p>
-              <Link to="/blogs/add" className="text-brand-500 font-bold">
-                Create Blog
-              </Link>
             </div>
           )}
         </>
       )}
+
+      <Link
+        to="/blogs/add"
+        className="flex text-brand-500 text-lg  items-center justify-center mt-2 space-x-2 border-1 border-brand-500 p-2 "
+      >
+        <h1 className=" text-brand-500 font-bold">Create Blog</h1>
+        <FaPlusCircle className="block" />
+      </Link>
     </div>
   );
 };
