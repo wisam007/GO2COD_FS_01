@@ -13,7 +13,6 @@ const BlogPage = () => {
     return b._id == id;
   });
 
-  console.log(blog);
   if (isLoading) {
     return (
       <div className="flex my-auto h-svh justify-center items-center">
@@ -22,7 +21,6 @@ const BlogPage = () => {
     );
   }
 
-  console.log(id);
   if (blog) {
     return (
       <>

@@ -3,14 +3,22 @@ import Heading from "../components/Heading";
 import { AuthContext } from "../context/AuthContext";
 import { BlogContext } from "../context/BlogContext";
 import { BeatLoader } from "react-spinners";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const AddBlogPage = () => {
+const EditBlogs = () => {
   const navigate = useNavigate();
   const { isAuthenticated, currentUser } = useContext(AuthContext);
-  const { blogs, isLoading, addBlog, fetchBlogs } = useContext(BlogContext);
-  const [formData, setFormData] = useState({ title: "", body: "" });
+  const { blogs, isLoading, editBlog, fetchBlogs } = useContext(BlogContext);
+  const { id } = useParams();
+  const blog = blogs.find((b) => {
+    return b._id == id;
+  });
+
+  const [formData, setFormData] = useState({
+    title: blog.title,
+    body: blog.body,
+  });
 
   // Redirect if the user is not logged in
   if (!isAuthenticated || !currentUser) {
@@ -24,8 +32,8 @@ const AddBlogPage = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    addBlog(formData, currentUser.token);
-    toast.success("Bloag Posted Successfully!");
+    editBlog(formData, id, currentUser.token);
+    toast.success("Blog Eddited");
     navigate("/blogs/my");
   };
   if (isLoading) {
@@ -37,7 +45,7 @@ const AddBlogPage = () => {
   }
   return (
     <div className="flex-col items-center justify-center">
-      <Heading title={"Create Your Post"} />
+      <Heading title={"Edit Post"} />
       <div className="bg-white shadow-lg rounded-lg p-6 w-full">
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -53,6 +61,7 @@ const AddBlogPage = () => {
               name="title"
               onChange={handleChange}
               className="border bg-slate-100 rounded w-full py-2 px-3"
+              value={formData.title}
               required
             />
           </div>
@@ -71,6 +80,7 @@ const AddBlogPage = () => {
               onChange={handleChange}
               className="bg-slate-100 border rounded w-full h-44 py-2 px-3"
               required
+              value={formData.body}
             />
           </div>
 
@@ -79,7 +89,7 @@ const AddBlogPage = () => {
               type="submit"
               className="bg-brand-500 text-white px-4 py-2 rounded hover:bg-brand-700"
             >
-              Create Post
+              Edit Post
             </button>
           </div>
         </form>
@@ -88,4 +98,4 @@ const AddBlogPage = () => {
   );
 };
 
-export default AddBlogPage;
+export default EditBlogs;

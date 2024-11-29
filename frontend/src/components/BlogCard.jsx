@@ -75,7 +75,7 @@ const BlogCard = ({ blog }) => {
           <div className="border-t border-gray-300 my-4"></div>
 
           <p className="pr-8 text-left font-light">
-            {blog.body.split(" ").slice(0, 50).join(" ") + "..."}
+            {blog.body.split(" ").slice(0, 25).join(" ") + "..."}
             <Link
               to={`/${blog._id}`}
               className="text-brand-500 font-semibold inline"

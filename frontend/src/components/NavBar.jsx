@@ -1,19 +1,22 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FaUser, FaSignInAlt, FaSignOutAlt, FaBlog } from "react-icons/fa";
 import logo from "/h-logo.png";
 import { toast } from "react-toastify";
 
 const NavBar = () => {
   const { isAuthenticated, logout } = useContext(AuthContext);
+
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = async () => {
     await logout();
-    toast.success("Logged Out Seccessfull!!");
+    toast.success("Logged Out Successfully!!");
     navigate("/");
   };
+  const isActive = (path) => location.pathname === path;
 
   return (
     <header className="bg-white shadow-lg  fixed left-0 top-0 w-svw">
@@ -27,23 +30,35 @@ const NavBar = () => {
               <div className="ml-10 flex items-baseline space-x-4">
                 <Link
                   to="/"
-                  className="rounded-md px-3 py-2 text-lg font-medium text-brand-500 hover:bg-brand-500 hover:text-white"
+                  className={`rounded-md px-3 py-2 font-medium  hover:bg-brand-500 hover:text-white ${
+                    isActive("/")
+                      ? "border-b-4 border-brand-500 text-brand-500"
+                      : "text-brand-500"
+                  }`}
                 >
                   Home
+                </Link>
+                <Link
+                  to="/about"
+                  className={`rounded-md px-3 py-2 font-medium  hover:bg-brand-500 hover:text-white ${
+                    isActive("/about")
+                      ? "border-b-4 border-brand-500 text-brand-500"
+                      : "text-brand-500"
+                  }`}
+                >
+                  About
                 </Link>
                 {/* <!-- Logged In Only --> */}
                 {isAuthenticated && (
                   <>
                     {" "}
                     <Link
-                      to="/about"
-                      className="rounded-md px-3 py-2 text-lg font-medium text-brand-500 hover:bg-brand-500 hover:text-white"
-                    >
-                      About
-                    </Link>
-                    <Link
                       to="/blogs/add"
-                      className="rounded-md px-3 py-2 text-lg font-medium text-brand-500 hover:bg-brand-500 hover:text-white"
+                      className={`rounded-md px-3 py-2 font-medium  hover:bg-brand-500 hover:text-white ${
+                        isActive("/blogs/add")
+                          ? "border-b-4 border-brand-500 text-brand-500"
+                          : "text-brand-500"
+                      }`}
                     >
                       Add New
                     </Link>
@@ -75,7 +90,14 @@ const NavBar = () => {
               {isAuthenticated && (
                 <>
                   {" "}
-                  <Link to="/blogs/my">
+                  <Link
+                    to="/blogs/my"
+                    className={`${
+                      isActive("/blogs/my")
+                        ? "border-b-4 border-brand-500 p-2"
+                        : ""
+                    }`}
+                  >
                     <FaBlog className="inline mr-1" /> My Blogs
                   </Link>
                   <button

@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { MdDelete, MdEditSquare } from "react-icons/md";
 import { AuthContext } from "../context/AuthContext";
 import { BlogContext } from "../context/BlogContext";
-import { ClipLoader } from "react-spinners";
+import { BeatLoader } from "react-spinners";
 
 const MyBlogsPage = () => {
   const navigate = useNavigate();
@@ -21,35 +21,35 @@ const MyBlogsPage = () => {
   const myBlogs = blogs.filter((blog) => blog.user.userId === currentUser._id);
 
   return (
-    <div>
+    <div className="h-96">
       <Heading title="Manage Your Blogs" />
       {isLoading ? (
-        <div className="h-svh flex items-center justify-center">
-          <ClipLoader />
+        <div className="h-96 flex items-center justify-center">
+          <BeatLoader />
         </div>
       ) : (
         <>
           {myBlogs.length > 0 ? (
             myBlogs.map((blog) => (
               <div
-                key={blog.id}
-                className="bg-white shadow rounded-lg p-4 mt-4 flex-col sm:flex-row items-center justify-start sm:items-center"
+                key={blog._id}
+                className="bg-white  shadow rounded-lg p-4 mt-4 flex-col sm:flex-row items-center justify-start sm:items-center"
               >
                 <h4 className="text-2xl font-bold">{blog.title}</h4>
                 <p className="pr-8 text-left font-light">
                   {/* Safely handle undefined or null content */}
-                  {blog.content
-                    ? `${blog.content.substring(0, 100)}...`
+                  {blog.body
+                    ? `${blog.body.substring(0, 100)}...`
                     : "No content available."}
                   <Link
-                    to={`/blogs/${blog.id}`}
+                    to={`/${blog._id}`}
                     className="text-brand-500 font-semibold"
                   >
                     Read More
                   </Link>
                 </p>
                 <div className="flex justify-end items-center space-x-4 text-2xl mx-7">
-                  <button onClick={() => navigate(`/edit-blog/${blog.id}`)}>
+                  <button onClick={() => navigate(`/blogs/edit/${blog._id}`)}>
                     <MdEditSquare className="text-green-900 cursor-pointer" />
                   </button>
                   <button
@@ -67,7 +67,7 @@ const MyBlogsPage = () => {
               <p className="text-gray-500">
                 You haven't created any blogs yet!
               </p>
-              <Link to="/create-blog" className="text-brand-500 font-bold">
+              <Link to="/blogs/add" className="text-brand-500 font-bold">
                 Create Blog
               </Link>
             </div>
